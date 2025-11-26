@@ -26,7 +26,21 @@ def main(page: ft.Page):
                 ),
                 ft.Container(
                     width=300,
-                    margin=ft.margin.only(left=10,right=10,top=10)
+                    margin=ft.margin.only(left=110,right=10,top=3),
+                    content= ft.Text(
+                        "Login",
+                        size=30,
+                        color="#000000",
+                        weight="w700"
+                    )
+                ),
+                ft.Container(
+                    width=300,
+                    margin= ft.margin.only(left=10,right=10,top=10),
+                    content= ft.Text("Please enter your information below in order to login to your account",
+                    size=15,
+                    color="#000000"
+                    ),
                 )
             ]
         ),
