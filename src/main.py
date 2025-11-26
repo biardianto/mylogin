@@ -12,7 +12,23 @@ def main(page: ft.Page):
         bgcolor="#ffffff",
         border_radius=10,
         content = ft.Column(
-            
+            width=320,
+            controls=[
+                ft.Container(
+                    width=300,
+                    margin=ft.margin.only(left=170,right=10,top=10),
+                    content=ft.TextButton(
+                        "Create Account",
+                        style=ft.ButtonStyle(
+                            color="#000000"
+                        ),
+                    )
+                ),
+                ft.Container(
+                    width=300,
+                    margin=ft.margin.only(left=10,right=10,top=10)
+                )
+            ]
         ),
     )
     signup = ft.Container(
