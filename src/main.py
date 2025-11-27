@@ -2,47 +2,71 @@ import flet as ft
 
 
 def main(page: ft.Page):
-    page.title="Login and Register..."
-    
-    
-    
+    page.title = "Login and Register..."
+
     login = ft.Container(
         width=350,
         height=750,
         bgcolor="#ffffff",
         border_radius=10,
-        content = ft.Column(
+        content=ft.Column(
             width=320,
             controls=[
                 ft.Container(
                     width=300,
-                    margin=ft.margin.only(left=170,right=10,top=10),
+                    margin=ft.margin.only(left=170, right=10, top=10),
                     content=ft.TextButton(
                         "Create Account",
                         style=ft.ButtonStyle(
-                            color="#000000"
+                            color="#000000",
                         ),
-                    )
+                    ),
                 ),
                 ft.Container(
                     width=300,
-                    margin=ft.margin.only(left=110,right=10,top=3),
-                    content= ft.Text(
+                    margin=ft.margin.only(left=110, right=10, top=3),
+                    content=ft.Text(
                         "Login",
                         size=30,
                         color="#000000",
-                        weight="w700"
-                    )
+                        weight="w700",
+                    ),
                 ),
                 ft.Container(
                     width=300,
-                    margin= ft.margin.only(left=10,right=10,top=10),
-                    content= ft.Text("Please enter your information below in order to login to your account",
-                    size=15,
-                    color="#000000"
+                    margin=ft.margin.only(left=20, right=20, top=20),
+                    alignment=ft.alignment.center,
+                    content=ft.Text(
+                        "Please enter your information below in order to login to your account",
+                        size=14,
+                        color="#000000",
+                        text_align="center",
                     ),
-                )
-            ]
+                ),
+                ft.Container(
+                    width=300,
+                    margin=ft.margin.only(left=20, right=20, top=5),
+                    content=ft.Column(
+                        controls=[
+                            ft.Text(
+                                "Username",
+                                size=14,
+                                color="#000000",
+                            ),
+                            ft.TextField(
+                                text_style=ft.TextStyle(
+                                    color="#000000",
+                                ),
+                                password=True,
+                                can_reveal_password=True,
+                                border_radius=15,
+                                border_color=ft.Colors.BLACK,
+                                focused_border_color=ft.Colors.ORANGE,
+                            ),
+                        ]
+                    ),
+                ),
+            ],
         ),
     )
     signup = ft.Container(
@@ -50,42 +74,17 @@ def main(page: ft.Page):
         height=750,
         bgcolor="#ffffff",
         border_radius=10,
-        content = ft.Column(
-            
-        ),
+        content=ft.Column(),
     )
-    
-    
+
     body = ft.Container(
-        width = 1000,
-        height = 800,
-        content = ft.Row(controls=[
-            login,
-            signup
-        ])
+        width=1000, height=800, content=ft.Row(controls=[login, signup])
     )
-    
+
     page.add(body)
-    
-    
-    
+
+
 ft.app(target=main)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # def main(page: ft.Page):
