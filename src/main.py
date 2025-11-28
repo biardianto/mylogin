@@ -1,4 +1,5 @@
 import flet as ft
+import Signup as sg
 
 
 def main(page: ft.Page):
@@ -87,6 +88,75 @@ def main(page: ft.Page):
                         ]
                     ),
                 ),
+                ft.Container(
+                    width=300,
+                    margin=ft.margin.only(left=120),
+                    content=ft.TextButton(
+                        "Forgot Password?", style=ft.ButtonStyle(color="#000000")
+                    ),
+                ),
+                ft.Container(
+                    width=300,
+                    margin=ft.margin.only(left=20, right=20, top=20),
+                    content=ft.TextButton(
+                        "Login",
+                        width=300,
+                        height=55,
+                        style=ft.ButtonStyle(
+                            color=ft.Colors.WHITE,
+                            bgcolor=ft.Colors.ORANGE_700,
+                            shape={
+                                ft.ControlState.FOCUSED: ft.RoundedRectangleBorder(
+                                    radius=15
+                                ),
+                                ft.ControlState.HOVERED: ft.RoundedRectangleBorder(
+                                    radius=15
+                                ),
+                            },
+                            padding=20,
+                        ),
+                    ),
+                ),
+                ft.Container(
+                    width=300,
+                    margin=ft.margin.only(left=20, right=20, top=15),
+                    content=ft.Text(
+                        "Or use social media account.",
+                        size=14,
+                        text_align="center",
+                        color="#000000",
+                    ),
+                ),
+                ft.Container(
+                    width=300,
+                    margin=ft.margin.only(left=20, right=20, top=15),
+                    content=ft.Row(
+                        controls=[
+                            ft.Container(
+                                ft.Image(
+                                    r"img\facebook.png",
+                                    width=48,
+                                ),
+                                margin=ft.margin.only(right=10),
+                            ),
+                            ft.Container(
+                                ft.Image(
+                                    r"img\gmail.png",
+                                    width=48,
+                                ),
+                                margin=ft.margin.only(right=10),
+                            ),
+                            ft.Container(
+                                ft.Image(
+                                    r"img\mail.png",
+                                    width=48,
+                                ),
+                                margin=ft.margin.only(right=10),
+                            ),
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER,
+                    ),
+                ),
             ],
         ),
     )
@@ -95,14 +165,28 @@ def main(page: ft.Page):
         height=750,
         bgcolor="#ffffff",
         border_radius=10,
-        content=ft.Column(),
+        content=ft.Column(
+            width=320,
+            controls=[
+                ft.Container(
+                    width=300,
+                    content=ft.IconButton(
+                        # icon=
+                    )
+                )
+            ]
+        ),
     )
 
     body = ft.Container(
         width=1000,
         height=800,
         content=ft.Row(
-            controls=[login, signup],
+            controls=[
+                login,
+                signup,
+                # sg.signupx,
+            ],
         ),
     )
 
