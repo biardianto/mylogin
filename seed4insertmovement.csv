@@ -1,0 +1,3 @@
+embinsert,kloterinsert,flightnoinsert,originsert,registerinsert,destinsert,depdateinsert,etdinsert,arrdateinsert,etainsert,actypeinsert
+LOP,999,3199,MES,PK-GFF,JED,01062025,0130,01062025,1045,A330
+LOP,100,5199,LOP,PK-GFF,JED,01062025,2050,02062025,0550,B777
