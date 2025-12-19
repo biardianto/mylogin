@@ -23,6 +23,7 @@ url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?mon
 
 driver.get(url)
 time.sleep(2) # Wait for the page to load
+# driver.quit()
 
 driver.find_element(By.NAME, 'usernamemonitoring').send_keys(str('ch'))
 driver.find_element(By.NAME, 'passwordmonitoring').send_keys(str('poskohalim'))
