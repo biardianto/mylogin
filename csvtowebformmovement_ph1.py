@@ -8,7 +8,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # 1. Read data from CSV
-df = pd.read_csv('seed4insertmovement.csv')
+df = pd.read_csv('seed4insert_mvt_lop_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_mes_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_jkt_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_upg_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_bpn_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_btj_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_soc_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 
 chrome_options = Options()
 chrome_options.add_argument('--ignore-certificate-errors')
@@ -69,7 +75,7 @@ for index, row in df.iterrows():
         driver.find_element(By.NAME, 'sub').click()
         time.sleep(2) # Wait for the page to load
         
-        print(f"Submitted data for row {index} {row['embinsert']},{row['kloterinsert']},{row['flightnoinsert']},{row['originsert']},{row['registerinsert']},{row['destinsert']},{row['depdateinsert']},{row['etdinsert']},{row['arrdateinsert']},{row['etainsert']},{row['actypeinsert']}")
+        print(f"Submitted data for row {index} ")
         # Find the element by partial link text and click it
         link_element = driver.find_element(By.PARTIAL_LINK_TEXT, "Insert New Flight")
         link_element.click()
