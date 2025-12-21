@@ -49,6 +49,7 @@ time.sleep(2)
 link_element = driver.find_element(By.PARTIAL_LINK_TEXT, "Insert New Flight")
 link_element.click()
 
+idx=0
 for index, row in df.iterrows():
     # if index==0: continue
     # url = 'https://simhajtraining.garuda-indonesia.com/monitoring/page_monitoring/fltmoninsert.php?embfm='+row['embinsert']+'&&kloterfm=&&flightnofm=&&origfm=&&registerfm=&&destfm=&&depdatefm=&&depdatetofm=&&arrdatetofm=&&arrdatefromfm='
@@ -75,7 +76,8 @@ for index, row in df.iterrows():
         driver.find_element(By.NAME, 'sub').click()
         time.sleep(2) # Wait for the page to load
         
-        print(f"Submitted data for row {index} ")
+        idx=idx+1
+        print(f"Submitted data for row {idx} {index} {row['embinsert']}{row['kloterinsert']} ")
         # Find the element by partial link text and click it
         link_element = driver.find_element(By.PARTIAL_LINK_TEXT, "Insert New Flight")
         link_element.click()

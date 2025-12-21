@@ -45,19 +45,28 @@ df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":s
 
 bufembarkasi=''
 bufkloter=''
+datajson = {}
 for index, row in df1.iterrows():
     # pass
-    if(bufembarkasi == row['embinsert'] and bufkloter == row['kloterinsert']):
-        continue
+    # if(bufembarkasi == row['embinsert'] and bufkloter == row['kloterinsert']):
+        # continue
     bufembarkasi = row['embinsert']
     bufkloter = row['kloterinsert']
-    # buforigin = row['originsert'] if(row['originsert']==row['embinsert']) elif (row['embinsert']=="JKT"): "CGK" else: "KNO"
-
-    if (row['originsert']==row['embinsert']): buforigin = row['originsert']
-    elif (row['embinsert']=="JKT"): buforigin = "CGK"
-    else: buforigin = "KNO"
-    
+    bufflight = row['flightnoinsert'] #if(row['originsert']==row['embinsert']) elif (row['embinsert']=="JKT"): "CGK" else: "KNO"
+    buforigin = row['originsert'] #if(row['originsert']==row['embinsert']) elif (row['embinsert']=="JKT"): "CGK" else: "KNO"
     bufdestination = row['destinsert'] #if(row['originsert']==row['embinsert']) else "" 
+
+    if(((bufembarkasi == buforigin) or (bufembarkasi == "MES" and buforigin=="KNO") or (bufembarkasi == "JKT" and buforigin=="CGK")) and (bufdestination=="MED" or bufdestination=="JED")):
+        #DIRECT FLIGHT
+        continue
+    else:
+        # comment: CONNECTING FLIGHT
+        continue
+
+    # if (row['originsert']==row['embinsert']): buforigin = row['originsert']
+    # elif (row['embinsert']=="JKT"): buforigin = "CGK"
+    # else: buforigin = "KNO"
+    
 
     df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
     result = df1x.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & originsert==@buforigin')
