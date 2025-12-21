@@ -8,13 +8,13 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # 1. Read data from CSV
-df = pd.read_csv('seed4insert_mvt_lop_ph2.csv')
-# df = pd.read_csv('seed4insert_mvt_mes_ph2.csv')
-# df = pd.read_csv('seed4insert_mvt_jkt_ph2.csv')
-# df = pd.read_csv('seed4insert_mvt_upg_ph2.csv')
-# df = pd.read_csv('seed4insert_mvt_bpn_ph2.csv')
-# df = pd.read_csv('seed4insert_mvt_btj_ph2.csv')
-# df = pd.read_csv('seed4insert_mvt_soc_ph2.csv')
+df = pd.read_csv('seed4insert_mvt_lop_ph2.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_mes_ph2.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_jkt_ph2.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_upg_ph2.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_bpn_ph2.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_btj_ph2.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = pd.read_csv('seed4insert_mvt_soc_ph2.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 
 chrome_options = Options()
 chrome_options.add_argument('--ignore-certificate-errors')
