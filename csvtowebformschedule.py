@@ -10,24 +10,26 @@ import time
 # 1. Read data from CSV
 # df = pd.read_csv('seed4insert_schedule.csv')
 ph='1'
-fn='seed4insert_mvt_lop_ph'+ph+'.csv'
-# fn='seed4insert_mvt_mes_ph'+ph+'.csv'
-# fn='seed4insert_mvt_jkt_ph'+ph+'.csv'
-# fn='seed4insert_mvt_upg_ph'+ph+'.csv'
-fn='seed4insert_mvt_bpn_ph'+ph+'.csv'
-# fn='seed4insert_mvt_btj_ph'+ph+'.csv'
-# fn='seed4insert_mvt_soc_ph'+ph+'.csv'
+emb='lop'
+fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+ph='2'
+fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
+df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 
-# ph='2'
-# fn='seed4insert_mvt_lop_ph'+ph+'.csv'
 # fn='seed4insert_mvt_mes_ph'+ph+'.csv'
 # fn='seed4insert_mvt_jkt_ph'+ph+'.csv'
 # fn='seed4insert_mvt_upg_ph'+ph+'.csv'
 # fn='seed4insert_mvt_bpn_ph'+ph+'.csv'
 # fn='seed4insert_mvt_btj_ph'+ph+'.csv'
 # fn='seed4insert_mvt_soc_ph'+ph+'.csv'
-# df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+
+# fn='seed4insert_mvt_mes_ph'+ph+'.csv'
+# fn='seed4insert_mvt_jkt_ph'+ph+'.csv'
+# fn='seed4insert_mvt_upg_ph'+ph+'.csv'
+# fn='seed4insert_mvt_bpn_ph'+ph+'.csv'
+# fn='seed4insert_mvt_btj_ph'+ph+'.csv'
+# fn='seed4insert_mvt_soc_ph'+ph+'.csv'
 
 # result = df1['kloterinsert'].unique().tolist()
 # result = df1[(df1['embinsert']=='LOP') & (df1['kloterinsert']=='001')].index
@@ -46,7 +48,7 @@ df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":s
 bufembarkasi=''
 bufkloter=''
 datajson = {}
-df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 for index, row in df1.iterrows():
     # pass
     # if(bufembarkasi == row['embinsert'] and bufkloter == row['kloterinsert']):
@@ -60,33 +62,36 @@ for index, row in df1.iterrows():
 
     # if(((bufembarkasi == buforigin) or (bufembarkasi == "MES" and buforigin=="KNO") or (bufembarkasi == "JKT" and buforigin=="CGK")) and (bufdestination=="MED" or bufdestination=="JED")):
     if(((bufembarkasi == buforigin) or (bufembarkasi == "MES" and buforigin=="KNO") or (bufembarkasi == "JKT" and buforigin=="CGK"))):
-        if(bufdestination=="MED" or bufdestination=="JED"):
-            #DIRECT FLIGHT
-            df11 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
-            result = df11.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert== @bufflight & originsert==@buforigin & destinsert==@bufdestination')
-            print(result)
-            # pass
-        else:
-            # comment: CONNECTING FLIGHT
-            df11 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
-            # df11 = df1x.copy()
-            # result = df1x.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert== @bufflight &  originsert==@buforigin')
-            # print(result)
-            result1 = df11.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert== @bufflight &  (destinsert=="MED" or destinsert=="JED")')
-            # df1xx = df1x.copy()
-            # df1xx.loc['']
+        # if(bufdestination=="MED" or bufdestination=="JED"):
+        #     #DIRECT FLIGHT
+        #     df11 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+        result1 = df1.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & originsert==@buforigin')
+        result2 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & (destinsert=="MED" or destinsert=="JED")')
+        print(result1)
+        print(result2)
+        #     # pass
+        # else:
+        #     # comment: CONNECTING FLIGHT
+        #     df11 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+        #     # df11 = df1x.copy()
+        #     # result = df1x.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert== @bufflight &  originsert==@buforigin')
+        #     # print(result)
+        #     result1 = df11.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert== @bufflight &  (destinsert=="MED" or destinsert=="JED")')
+        #     # df1xx = df1x.copy()
+        #     # df1xx.loc['']
 
-            # df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
-            print(result1['destinsert'])
-            df1x.loc[(df1x['embinsert']==bufembarkasi) & (df1x['kloterinsert']==bufkloter) & (df1x['flightnoinsert']==bufflight),'destinsert'] = str(result1['destinsert'])
-            # result['destinsert']=result1['destinsert']
-            # result['arrdateinsert']= result1['arrdateinsert']
-            # result['etainsert']= result1['etainsert']
-            # result['destinsert'] ='XXXXX'
-            print(df1x)
-            # print(result)
-            # print(result1)
-            # print(result1['destinsert'])
+        #     # df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+        #     print(result1['destinsert'])
+        #     df1x.loc[(df1x['embinsert']==bufembarkasi) & (df1x['kloterinsert']==bufkloter) & (df1x['flightnoinsert']==bufflight),'destinsert'] = str(result1['destinsert'])
+        #     # result['destinsert']=result1['destinsert']
+        #     # result['arrdateinsert']= result1['arrdateinsert']
+        #     # result['etainsert']= result1['etainsert']
+        #     # result['destinsert'] ='XXXXX'
+        #     print(df1x)
+        #     # print(result)
+        #     # print(result1)
+        #     # print(result1['destinsert'])
+            
             # pass
 
         continue

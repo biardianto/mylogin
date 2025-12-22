@@ -8,7 +8,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # 1. Read data from CSV
-df = pd.read_csv('seed4insert_mvt_lop_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+ph='2'
+emb='lop'
+fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
+df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+df = df1
+# ph='2'
+# fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
+# df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
+# df = df2
+
+
+# df = pd.read_csv('seed4insert_mvt_lop_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 # df = pd.read_csv('seed4insert_mvt_mes_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 # df = pd.read_csv('seed4insert_mvt_jkt_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 # df = pd.read_csv('seed4insert_mvt_upg_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
@@ -22,6 +33,7 @@ chrome_options.add_argument('--ignore-ssl-errors')
 # Configure the Selenium WebDriver (using webdriver-manager for simplicity)
 service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service,options=chrome_options)
+# driver = webdriver.Chrome(options=chrome_options)
 
 # Target URL of the web form    
 url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
@@ -60,6 +72,9 @@ for index, row in df.iterrows():
         # Find form elements by their ID, Name, or Xpath and fill them
         # Replace 'field_id_1', 'field_id_2', etc., with the actual IDs from the webpage's HTML
         # embinsert,kloterinsert,flightnoinsert,originsert,registerinsert,destinsert,depdateinsert,etdinsert,arrdateinsert,etainsert,actypeinsert
+        bufactype = str(row['actypeinsert'])
+        if(bufactype[:1]=="7"): bufactype = "B"+bufactype
+        elif(bufactype[:1]=="3"): bufactype = "A"+bufactype
         driver.find_element(By.NAME, 'embinsert').send_keys(str(row['embinsert']))
         driver.find_element(By.NAME, 'kloterinsert').send_keys(str(row['kloterinsert']))
         driver.find_element(By.NAME, 'flightnoinsert').send_keys(row['flightnoinsert'])
@@ -70,9 +85,11 @@ for index, row in df.iterrows():
         driver.find_element(By.NAME, 'etdinsert').send_keys(str(row['etdinsert']) if len(str(row['etdinsert']))==4 else '0'+str(row['etdinsert']))
         driver.find_element(By.NAME, 'arrdateinsert').send_keys(str(row['arrdateinsert']) if len(str(row['arrdateinsert']))==8 else '0'+str(row['arrdateinsert']))
         driver.find_element(By.NAME, 'etainsert').send_keys(str(row['etainsert']) if len(str(row['etainsert']))==4 else '0'+str(row['etainsert']))
-        driver.find_element(By.NAME, 'actypeinsert').send_keys(str(row['actypeinsert']))
+        driver.find_element(By.NAME, 'actypeinsert').send_keys(bufactype)
         
         # Find and click the submit button
+        # print(bufactype[:2])
+        # input("press enter console")
         driver.find_element(By.NAME, 'sub').click()
         time.sleep(2) # Wait for the page to load
         
