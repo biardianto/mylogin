@@ -1,9 +1,11 @@
 import pandas as pd
 from selenium import webdriver
+# from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.firefox.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 
@@ -16,20 +18,7 @@ df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":s
 ph='2'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
-
-# fn='seed4insert_mvt_mes_ph'+ph+'.csv'
-# fn='seed4insert_mvt_jkt_ph'+ph+'.csv'
-# fn='seed4insert_mvt_upg_ph'+ph+'.csv'
-# fn='seed4insert_mvt_bpn_ph'+ph+'.csv'
-# fn='seed4insert_mvt_btj_ph'+ph+'.csv'
-# fn='seed4insert_mvt_soc_ph'+ph+'.csv'
-
-# fn='seed4insert_mvt_mes_ph'+ph+'.csv'
-# fn='seed4insert_mvt_jkt_ph'+ph+'.csv'
-# fn='seed4insert_mvt_upg_ph'+ph+'.csv'
-# fn='seed4insert_mvt_bpn_ph'+ph+'.csv'
-# fn='seed4insert_mvt_btj_ph'+ph+'.csv'
-# fn='seed4insert_mvt_soc_ph'+ph+'.csv'
+print("Simulate Entry SIMHAJ menu Schedule Flight for Embarkasi ", str.upper(emb))
 
 # result = df1['kloterinsert'].unique().tolist()
 # result = df1[(df1['embinsert']=='LOP') & (df1['kloterinsert']=='001')].index
@@ -37,13 +26,46 @@ df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":s
 # print(result)
 # quit()
 
-# df2 = pd.read_csv('seed4insert_mvt_lop_ph2.csv')
-# df2 = pd.read_csv('seed4insert_mvt_mes_ph2.csv')
-# df2 = pd.read_csv('seed4insert_mvt_jkt_ph2.csv')
-# df2 = pd.read_csv('seed4insert_mvt_upg_ph2.csv')
-# df2 = pd.read_csv('seed4insert_mvt_bpn_ph2.csv')
-# df2= pd.read_csv('seed4insert_mvt_btj_ph2.csv')
-# df2 = pd.read_csv('seed4insert_mvt_soc_ph2.csv') 
+# LOGIN TO SIMHAJ FIRST
+
+# CHROME
+chrome_options = Options()
+chrome_options.add_argument('--ignore-certificate-errors')
+chrome_options.add_argument('--ignore-ssl-errors')
+# prefs = {"profile.managed_default_content_settings.images": 2}
+# chrome_options.add_experimental_option("prefs", prefs)
+# Configure the Selenium WebDriver (using webdriver-manager for simplicity)
+service = ChromeService(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service,options=chrome_options)
+
+# FIREFOX
+# driver = webdriver.Firefox()
+
+# Target URL of the web form    
+url = 'https://simhajtraining.garuda-indonesia.com/login'   
+# url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
+# url = 'https://simhaj.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
+
+driver.get(url)
+time.sleep(2) # Wait for the page to load
+# driver.quit()
+
+driver.find_element(By.NAME, 'user_id').send_keys(str('y2k'))
+driver.find_element(By.NAME, 'password').send_keys(str('wachid413'))
+input("isi CAPTCHA dan klik submit SIGNIN manulally then press enter console")
+
+# Find element with specific exact href
+# url = 'https://simhajtraining.garuda-indonesia.com/penerbangan'
+# driver.get(url)
+# time.sleep(2) # Wait for the page to load
+
+url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
+driver.get(url)
+# time.sleep(2) # Wait for the page to load
+# element = driver.find_element(By.XPATH, f"//a[@href='{url}']")
+# element.click()
+time.sleep(2) # Wait for the page to load
+# driver.quit()
 
 bufembarkasi=''
 bufkloter=''
@@ -66,9 +88,28 @@ for index, row in df1.iterrows():
         #     #DIRECT FLIGHT
         #     df11 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
         result1 = df1.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & originsert==@buforigin')
-        result2 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & (destinsert=="MED" or destinsert=="JED")')
+        result2 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & (originsert=="MED" or originsert=="JED")')
         print(result1)
         print(result2)
+        
+        # select_element = driver.find_element(By.NAME, "embarkasi")
+        select_element = driver.find_elements(By.XPATH, "//select[@name='embarkasi']/option[string-length(@value)>0]")
+        # dropdown = Select(select_element)
+        # time.sleep(3)
+        for option in select_element:
+            print(option.get_attribute("value"))
+        # non_empty_options = [opt for opt in dropdown.options if opt.get_attribute(result1['embinsert'])]
+        # print(non_empty_options)
+        # dropdown.select_by_value(result1['embinsert'])
+        # select_element.click()
+        input("plis enter")
+        time.sleep(2) # Wait for the page to load
+
+        driver.find_element(By.NAME, 'kloter').send_keys(result1['kloterinsert'])
+        # Find and click the submit button
+        driver.find_element(By.NAME, 'sub').click()
+        time.sleep(2) # Wait for the page to load
+
         #     # pass
         # else:
         #     # comment: CONNECTING FLIGHT
@@ -100,30 +141,30 @@ for index, row in df1.iterrows():
 
     # continue
 
-
+driver.quit()
 quit()
 
 
 
-chrome_options = Options()
-chrome_options.add_argument('--ignore-certificate-errors')
-chrome_options.add_argument('--ignore-ssl-errors')
-# Configure the Selenium WebDriver (using webdriver-manager for simplicity)
-service = Service(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service,options=chrome_options)
+# chrome_options = Options()
+# chrome_options.add_argument('--ignore-certificate-errors')
+# chrome_options.add_argument('--ignore-ssl-errors')
+# # Configure the Selenium WebDriver (using webdriver-manager for simplicity)
+# service = Service(ChromeDriverManager().install())
+# driver = webdriver.Chrome(service=service,options=chrome_options)
 
-# Target URL of the web form    
-url = 'https://simhajtraining.garuda-indonesia.com/login'   
-# url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
-# url = 'https://simhaj.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
+# # Target URL of the web form    
+# url = 'https://simhajtraining.garuda-indonesia.com/login'   
+# # url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
+# # url = 'https://simhaj.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
 
-driver.get(url)
-time.sleep(2) # Wait for the page to load
-# driver.quit()
+# driver.get(url)
+# time.sleep(2) # Wait for the page to load
+# # driver.quit()
 
-driver.find_element(By.NAME, 'user_id').send_keys(str('y2k'))
-driver.find_element(By.NAME, 'password').send_keys(str('wachid413'))
-input("isi CAPTCHA dan klik submit SIGNIN manulally then press enter console")
+# driver.find_element(By.NAME, 'user_id').send_keys(str('y2k'))
+# driver.find_element(By.NAME, 'password').send_keys(str('wachid413'))
+# input("isi CAPTCHA dan klik submit SIGNIN manulally then press enter console")
 # driver.find_element(By.NAME, 'Submit').click()
 
 url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'

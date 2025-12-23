@@ -8,7 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # 1. Read data from CSV
-ph='2'
+ph='1'
 emb='lop'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
@@ -17,7 +17,7 @@ df = df1
 # fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 # df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 # df = df2
-
+print("Simulate Entry SIMHAJ menu Movement Flight for Embarkasi ", str.upper(emb)," Phase ",ph)
 
 # df = pd.read_csv('seed4insert_mvt_lop_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 # df = pd.read_csv('seed4insert_mvt_mes_ph1.csv',dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
