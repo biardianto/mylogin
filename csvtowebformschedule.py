@@ -7,6 +7,8 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 # from selenium.webdriver.firefox.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
 # 1. Read data from CSV
@@ -92,18 +94,23 @@ for index, row in df1.iterrows():
         print(result1)
         print(result2)
         
-        # select_element = driver.find_element(By.NAME, "embarkasi")
-        select_element = driver.find_elements(By.XPATH, "//select[@name='embarkasi']/option[string-length(@value)>0]")
-        # dropdown = Select(select_element)
+        wait = WebDriverWait(driver, 10)
+        option = wait.until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "select#embarkasi option[value='LOP']"))
+        )
+        # select_element = driver.find_elements(By.XPATH, "//select[@name='embarkasi']/option[string-length(@value)>0]")
         # time.sleep(3)
-        for option in select_element:
-            print(option.get_attribute("value"))
+        # for option in select_element:
+        #     print(option.get_attribute("value"))
         # non_empty_options = [opt for opt in dropdown.options if opt.get_attribute(result1['embinsert'])]
-        # print(non_empty_options)
-        # dropdown.select_by_value(result1['embinsert'])
+        # print(select_element)
+        # select_element.select_by_value(result1['embinsert'])
+        select_element = driver.find_element(By.NAME, "embarkasi")
+        dropdown = Select(select_element)
+        dropdown.select_by_value(result1['embinsert'])
         # select_element.click()
+        # time.sleep(2) # Wait for the page to load
         input("plis enter")
-        time.sleep(2) # Wait for the page to load
 
         driver.find_element(By.NAME, 'kloter').send_keys(result1['kloterinsert'])
         # Find and click the submit button
