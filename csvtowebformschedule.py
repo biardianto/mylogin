@@ -1,18 +1,14 @@
 import pandas as pd
 from selenium import webdriver
-# from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
-# from selenium.webdriver.firefox.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import Select,WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# 1. Read data from CSV
-# df = pd.read_csv('seed4insert_schedule.csv')
 ph='1'
 emb='lop'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
@@ -21,12 +17,6 @@ ph='2'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 print("Simulate Entry SIMHAJ menu Schedule Flight for Embarkasi ", str.upper(emb))
-
-# result = df1['kloterinsert'].unique().tolist()
-# result = df1[(df1['embinsert']=='LOP') & (df1['kloterinsert']=='001')].index
-# # result = df1[df1['kloterinsert'].isin(['001'])]
-# print(result)
-# quit()
 
 # LOGIN TO SIMHAJ FIRST
 
@@ -74,9 +64,6 @@ bufkloter=''
 datajson = {}
 # df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 for index, row in df1.iterrows():
-    # pass
-    # if(bufembarkasi == row['embinsert'] and bufkloter == row['kloterinsert']):
-        # continue
     bufembarkasi = row['embinsert']
     bufkloter = row['kloterinsert']
     bufflight = row['flightnoinsert'] #if(row['originsert']==row['embinsert']) elif (row['embinsert']=="JKT"): "CGK" else: "KNO"
@@ -84,64 +71,82 @@ for index, row in df1.iterrows():
     bufdestination = row['destinsert'] #if(row['originsert']==row['embinsert']) else "" 
     bufregister = row['registerinsert'] #if(row['originsert']==row['embinsert']) else "" 
 
-    # if(((bufembarkasi == buforigin) or (bufembarkasi == "MES" and buforigin=="KNO") or (bufembarkasi == "JKT" and buforigin=="CGK")) and (bufdestination=="MED" or bufdestination=="JED")):
     if(((bufembarkasi == buforigin) or (bufembarkasi == "MES" and buforigin=="KNO") or (bufembarkasi == "JKT" and buforigin=="CGK"))):
-        # if(bufdestination=="MED" or bufdestination=="JED"):
-        #     #DIRECT FLIGHT
-        #     df11 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
         result1 = df1.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & originsert==@buforigin')
+        bufflight1 = result1['flightnoinsert'].iloc[0]
+        result11 = df1.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight1 & (destinsert=="MED" or destinsert=="JED")')
+
         result2 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & (originsert=="MED" or originsert=="JED")')
+        bufflight2 = result2['flightnoinsert'].iloc[0]
+        result22 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight2 & ((destinsert==@bufembarkasi) or (@bufembarkasi == "MES" and destinsert=="KNO") or (@bufembarkasi == "JKT" and destinsert=="CGK"))')
         print(result1)
+        print(result11)
         print(result2)
+        print(result22)
         
-        wait = WebDriverWait(driver, 10)
-        option = wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "select#embarkasi option[value='LOP']"))
+        select2_container = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, ".select2-selection__placeholder"))
         )
-        # select_element = driver.find_elements(By.XPATH, "//select[@name='embarkasi']/option[string-length(@value)>0]")
-        # time.sleep(3)
-        # for option in select_element:
-        #     print(option.get_attribute("value"))
-        # non_empty_options = [opt for opt in dropdown.options if opt.get_attribute(result1['embinsert'])]
-        # print(select_element)
-        # select_element.select_by_value(result1['embinsert'])
-        select_element = driver.find_element(By.NAME, "embarkasi")
-        dropdown = Select(select_element)
-        dropdown.select_by_value(result1['embinsert'])
-        # select_element.click()
-        # time.sleep(2) # Wait for the page to load
+        select2_container.click()
+
+        target_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Pilih Embarkasi')]"))
+        )
+        target_option.click()
+
+        bufembarkasi = str(result1['embinsert'].iloc[0])
+        # print(bufembarkasi)
+        driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Embarkasi')]").click()
+        input_field = driver.find_element(By.CLASS_NAME, "select2-search__field") 
+        input_field.send_keys(str(result1['embinsert'].iloc[0]))
+        time.sleep(1)
+        input_field.send_keys(Keys.ENTER)
+
+        input_field = driver.find_element(By.NAME, 'kloter')
+        input_field.click()
+        text_to_send = str(result1['kloterinsert'].iloc[0])
+        # Send keys one by one
+        for character in text_to_send:
+            input_field.send_keys(character)
+            time.sleep(1)
+
+        # PHASE I
+        input_field = driver.find_element(By.NAME, 'flt_no1[]')
+        input_field.click()
+        input_field.send_keys(str(result1['flightnoinsert'].iloc[0]))
+        time.sleep(1)
+        input_field.send_keys(Keys.ENTER)
+
+        bufflight = str(result1['registerinsert'].iloc[0])
+        # print(bufflight)
+        driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]").click()
+        input_field = driver.find_element(By.CLASS_NAME, "select2-search__field") 
+        input_field.send_keys(str(result1['registerinsert'].iloc[0]))
+        time.sleep(1)
+        input_field.send_keys(Keys.ENTER)
+
+        # PHASE II
+        input_field = driver.find_element(By.NAME, 'flt_no2[]')
+        input_field.click()
+        input_field.send_keys(str(result2['flightnoinsert'].iloc[0]))
+        time.sleep(1)
+        input_field.send_keys(Keys.ENTER)
+
+        bufflight = str(result2['registerinsert'].iloc[0])
+        # print(bufflight)
+        driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]").click()
+        input_field = driver.find_element(By.CLASS_NAME, "select2-search__field") 
+        input_field.send_keys(str(result2['registerinsert'].iloc[0]))
+        time.sleep(1)
+        input_field.send_keys(Keys.ENTER)
+        
+        time.sleep(1)
+        #SYNC TO HOME BUTTON
+        driver.find_element(By.XPATH, "//span[contains(text(), 'Sync to homes')]").click()
+        time.sleep(2) # Wait for the page to load
         input("plis enter")
 
-        driver.find_element(By.NAME, 'kloter').send_keys(result1['kloterinsert'])
-        # Find and click the submit button
-        driver.find_element(By.NAME, 'sub').click()
-        time.sleep(2) # Wait for the page to load
-
-        #     # pass
-        # else:
-        #     # comment: CONNECTING FLIGHT
-        #     df11 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
-        #     # df11 = df1x.copy()
-        #     # result = df1x.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert== @bufflight &  originsert==@buforigin')
-        #     # print(result)
-        #     result1 = df11.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert== @bufflight &  (destinsert=="MED" or destinsert=="JED")')
-        #     # df1xx = df1x.copy()
-        #     # df1xx.loc['']
-
-        #     # df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
-        #     print(result1['destinsert'])
-        #     df1x.loc[(df1x['embinsert']==bufembarkasi) & (df1x['kloterinsert']==bufkloter) & (df1x['flightnoinsert']==bufflight),'destinsert'] = str(result1['destinsert'])
-        #     # result['destinsert']=result1['destinsert']
-        #     # result['arrdateinsert']= result1['arrdateinsert']
-        #     # result['etainsert']= result1['etainsert']
-        #     # result['destinsert'] ='XXXXX'
-        #     print(df1x)
-        #     # print(result)
-        #     # print(result1)
-        #     # print(result1['destinsert'])
-            
-            # pass
-
+ 
         continue
     else:
         continue
