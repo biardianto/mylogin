@@ -1,3 +1,10 @@
+def samasama(parm1, parm2):
+    """
+    Purpose: parm1
+    """
+    return parm1==parm2
+
+
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -7,6 +14,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import Select,WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 import time
 
 ph='1'
@@ -51,19 +59,19 @@ input("isi CAPTCHA dan klik submit SIGNIN manulally then press enter console")
 # driver.get(url)
 # time.sleep(2) # Wait for the page to load
 
-url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
-driver.get(url)
+# url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
+# driver.get(url)
 # time.sleep(2) # Wait for the page to load
-# element = driver.find_element(By.XPATH, f"//a[@href='{url}']")
-# element.click()
-time.sleep(2) # Wait for the page to load
-# driver.quit()
 
 bufembarkasi=''
 bufkloter=''
 datajson = {}
 # df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 for index, row in df1.iterrows():
+    url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
+    driver.get(url)
+    time.sleep(2) # Wait for the page to load
+
     bufembarkasi = row['embinsert']
     bufkloter = row['kloterinsert']
     bufflight = row['flightnoinsert'] #if(row['originsert']==row['embinsert']) elif (row['embinsert']=="JKT"): "CGK" else: "KNO"
@@ -97,6 +105,7 @@ for index, row in df1.iterrows():
         bufembarkasi = str(result1['embinsert'].iloc[0])
         # print(bufembarkasi)
         driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Embarkasi')]").click()
+        time.sleep(2)
         input_field = driver.find_element(By.CLASS_NAME, "select2-search__field") 
         input_field.send_keys(str(result1['embinsert'].iloc[0]))
         time.sleep(1)
@@ -108,7 +117,7 @@ for index, row in df1.iterrows():
         # Send keys one by one
         for character in text_to_send:
             input_field.send_keys(character)
-            time.sleep(1)
+            time.sleep(0.5)
 
         # PHASE I
         input_field = driver.find_element(By.NAME, 'flt_no1[]')
@@ -119,7 +128,11 @@ for index, row in df1.iterrows():
 
         bufflight = str(result1['registerinsert'].iloc[0])
         # print(bufflight)
-        driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]").click()
+        target_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]"))
+        )
+        target_option.click()
+        # driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]").click()
         input_field = driver.find_element(By.CLASS_NAME, "select2-search__field") 
         input_field.send_keys(str(result1['registerinsert'].iloc[0]))
         time.sleep(1)
@@ -134,7 +147,11 @@ for index, row in df1.iterrows():
 
         bufflight = str(result2['registerinsert'].iloc[0])
         # print(bufflight)
-        driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]").click()
+        target_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]"))
+        )
+        target_option.click()
+        # driver.find_element(By.XPATH, "//span[contains(text(), 'Pilih Pesawat')]").click()
         input_field = driver.find_element(By.CLASS_NAME, "select2-search__field") 
         input_field.send_keys(str(result2['registerinsert'].iloc[0]))
         time.sleep(1)
@@ -142,9 +159,97 @@ for index, row in df1.iterrows():
         
         time.sleep(1)
         #SYNC TO HOME BUTTON
-        driver.find_element(By.XPATH, "//span[contains(text(), 'Sync to homes')]").click()
+        target_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Sync to homes')]"))
+            # driver.find_element(By.XPATH, "//span[contains(text(), 'Sync to homes')]").click()
+        )
+        target_option.click()
+        time.sleep(1) # Wait for the page to load
+
+        #PHASE I
+        input_element = driver.find_element(By.NAME, "tgl_berangkat1[]")
+        current_value = driver.find_element(By.NAME, "tgl_berangkat1[]").get_attribute("value").replace("-", "")
+        if (samasama(current_value,result1['depdateinsert'].iloc[0])==False):
+            # comment: 
+            print(f"Tanggal berangkat ph1: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+        # input_element = driver.find_element(By.NAME, "waktu_berangkat1[]")
+        current_value = driver.find_element(By.NAME, "waktu_berangkat1[]").get_attribute("value").replace(":", "")
+        if (samasama(current_value,result1['etdinsert'].iloc[0])==False):
+            # comment: 
+            print(f"Waktu berangkat ph1: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+        # input_element = driver.find_element(By.NAME, "tgl_tiba1[]")
+        current_value = driver.find_element(By.NAME, "tgl_tiba1[]").get_attribute("value").replace("-", "")
+        if (samasama(current_value,result11['arrdateinsert'].iloc[0])==False):
+            # comment: 
+            print(f"Tanggal tiba ph1: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+        # input_element = driver.find_element(By.NAME, "waktu_tiba1[]")
+        current_value = driver.find_element(By.NAME, "waktu_tiba1[]").get_attribute("value").replace(":", "")
+        if (samasama(current_value,result11['etainsert'].iloc[0])==False):
+            # comment: 
+            print(f"Waktu tiba ph1: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+
+        #PHASE II
+        # input_element = driver.find_element(By.NAME, "tgl_berangkat2[]")
+        current_value = driver.find_element(By.NAME, "tgl_berangkat2[]").get_attribute("value").replace("-", "")
+        if (samasama(current_value,result2['depdateinsert'].iloc[0])==False):
+            # comment: 
+            print(f"Tanggal berangkat ph2: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+        # input_element = driver.find_element(By.NAME, "waktu_berangkat2[]")
+        current_value = driver.find_element(By.NAME, "waktu_berangkat2[]").get_attribute("value").replace(":", "")
+        if (samasama(current_value,result2['etdinsert'].iloc[0])==False):
+            # comment: 
+            print(f"Waktu berangkat ph2: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+        # input_element = driver.find_element(By.NAME, "tgl_tiba2[]")
+        current_value =  driver.find_element(By.NAME, "tgl_tiba2[]").get_attribute("value").replace("-", "")
+        if (samasama(current_value,result22['arrdateinsert'].iloc[0])==False):
+            # comment: 
+            print(f"Tanggal tiba ph2: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+        # input_element = driver.find_element(By.NAME, "waktu_tiba2[]")
+        current_value = driver.find_element(By.NAME, "waktu_tiba2[]").get_attribute("value").replace(":", "")
+        if (samasama(current_value,result22['etainsert'].iloc[0])==False):
+            # comment: 
+            print(f"Waktu tiba ph2: {current_value} - BEDA")
+            continue
+            # pass
+        # end if
+
+        # input("plis enter - COCOK")
+        driver.find_element(By.NAME, "submit").click()
         time.sleep(2) # Wait for the page to load
-        input("plis enter")
+        # if (len(driver.find_element(By.XPATH, "//li[contains(text(), 'Data kloter sudah ada')]"))>0):
+        #     # comment: 
+        #     continue
+        # # end if
+        try:
+            driver.find_element(By.XPATH, "//li[contains(text(), 'Data kloter sudah ada')]")
+            # print("Element exists")
+            continue
+        except NoSuchElementException:
+            print("Element does not exist")
+            continue
+
+        time.sleep(3) # Wait for the page to load
 
  
         continue
@@ -154,87 +259,5 @@ for index, row in df1.iterrows():
     # continue
 
 driver.quit()
+
 quit()
-
-
-
-# chrome_options = Options()
-# chrome_options.add_argument('--ignore-certificate-errors')
-# chrome_options.add_argument('--ignore-ssl-errors')
-# # Configure the Selenium WebDriver (using webdriver-manager for simplicity)
-# service = Service(ChromeDriverManager().install())
-# driver = webdriver.Chrome(service=service,options=chrome_options)
-
-# # Target URL of the web form    
-# url = 'https://simhajtraining.garuda-indonesia.com/login'   
-# # url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
-# # url = 'https://simhaj.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
-
-# driver.get(url)
-# time.sleep(2) # Wait for the page to load
-# # driver.quit()
-
-# driver.find_element(By.NAME, 'user_id').send_keys(str('y2k'))
-# driver.find_element(By.NAME, 'password').send_keys(str('wachid413'))
-# input("isi CAPTCHA dan klik submit SIGNIN manulally then press enter console")
-# driver.find_element(By.NAME, 'Submit').click()
-
-url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
-
-driver.get(url)
-time.sleep(4) # Wait for the page to load
-driver.quit()
-
-# select_element = driver.find_element(By.NAME, "monitoring")
-# dropdown = Select(select_element)
-# dropdown.select_by_value("fltmon")
-# time.sleep(2)
-
-# Find the element by partial link text and click it
-# link_element = driver.find_element(By.PARTIAL_LINK_TEXT, "Insert New Flight")
-# link_element.click()
-
-for index, row in df1.iterrows():
-    # driver.get(url)
-    time.sleep(2) # Wait for the page to load
-
-    try:
-        # Find form elements by their ID, Name, or Xpath and fill them
-        # Replace 'field_id_1', 'field_id_2', etc., with the actual IDs from the webpage's HTML
-        # embinsert,kloterinsert,flightnoinsert,originsert,registerinsert,destinsert,depdateinsert,etdinsert,arrdateinsert,etainsert,actypeinsert
-        embarkasi = str(row['embinsert'])
-        kloter = str(row['kloterinsert'])
-        fltno = row['flightnoinsert']
-        origin = row['originsert']
-        register = row['registerinsert']
-        destination = str(row['destinsert'])
-
-
-        driver.find_element(By.NAME, 'embarkasi').send_keys(embarkasi)
-        driver.find_element(By.NAME, 'kloter').send_keys(kloter)
-        driver.find_element(By.NAME, 'flt_no1[]').send_keys(fltno)
-        driver.find_element(By.NAME, 'pesawat1[]').send_keys(row['flightnoinsert'])
-        driver.find_element(By.NAME, 'flt_no2[]').send_keys(fltno)
-        driver.find_element(By.NAME, 'pesawat2[]').send_keys(row['flightnoinsert'])
-        driver.find_element(By.NAME, 'originsert').send_keys(origin)
-        driver.find_element(By.NAME, 'registerinsert').send_keys(register)
-        driver.find_element(By.NAME, 'destinsert').send_keys(destination)
-        driver.find_element(By.NAME, 'depdateinsert').send_keys(str(row['depdateinsert']) if len(str(row['depdateinsert']))==8 else '0'+str(row['depdateinsert']))
-        driver.find_element(By.NAME, 'etdinsert').send_keys(str(row['etdinsert']) if len(str(row['etdinsert']))==4 else '0'+str(row['etdinsert']))
-        driver.find_element(By.NAME, 'arrdateinsert').send_keys(str(row['arrdateinsert']) if len(str(row['arrdateinsert']))==8 else '0'+str(row['arrdateinsert']))
-        driver.find_element(By.NAME, 'etainsert').send_keys(str(row['etainsert']) if len(str(row['etainsert']))==4 else '0'+str(row['etainsert']))
-        driver.find_element(By.NAME, 'actypeinsert').send_keys(str(row['actypeinsert']))
-        
-        # Find and click the submit button
-        driver.find_element(By.NAME, 'sub').click()
-        time.sleep(2) # Wait for the page to load
-        
-        print(f"Submitted data for row {index} ")
-        # Find the element by partial link text and click it
-        link_element = driver.find_element(By.PARTIAL_LINK_TEXT, "Insert New Flight")
-        link_element.click()
-
-    except Exception as e:
-        print(f"Error submitting row {index}: {e} {row['embinsert']},{row['kloterinsert']},{row['flightnoinsert']},{row['originsert']},{row['registerinsert']},{row['destinsert']},{row['depdateinsert']},{row['etdinsert']},{row['arrdateinsert']},{row['etainsert']},{row['actypeinsert']}")
-
-driver.quit()
