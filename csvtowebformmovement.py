@@ -8,8 +8,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # 1. Read data from CSV
-ph='1'
-emb='lop'
+ph='2'
+emb='soc'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 df = df1

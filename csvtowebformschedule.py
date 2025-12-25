@@ -18,7 +18,7 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 
 ph='1'
-emb='lop'
+emb='soc'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 ph='2'
@@ -168,10 +168,11 @@ for index, row in df1.iterrows():
 
         #PHASE I
         input_element = driver.find_element(By.NAME, "tgl_berangkat1[]")
+        time.sleep(1) # Wait for the page to load
         current_value = driver.find_element(By.NAME, "tgl_berangkat1[]").get_attribute("value").replace("-", "")
         if (samasama(current_value,result1['depdateinsert'].iloc[0])==False):
             # comment: 
-            print(f"Tanggal berangkat ph1: {current_value} - BEDA")
+            print(f"Tanggal berangkat ph1: {current_value} <=> {result1['depdateinsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
@@ -179,7 +180,7 @@ for index, row in df1.iterrows():
         current_value = driver.find_element(By.NAME, "waktu_berangkat1[]").get_attribute("value").replace(":", "")
         if (samasama(current_value,result1['etdinsert'].iloc[0])==False):
             # comment: 
-            print(f"Waktu berangkat ph1: {current_value} - BEDA")
+            print(f"Waktu berangkat ph1: {current_value} <=> {result1['etdinsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
@@ -187,7 +188,7 @@ for index, row in df1.iterrows():
         current_value = driver.find_element(By.NAME, "tgl_tiba1[]").get_attribute("value").replace("-", "")
         if (samasama(current_value,result11['arrdateinsert'].iloc[0])==False):
             # comment: 
-            print(f"Tanggal tiba ph1: {current_value} - BEDA")
+            print(f"Tanggal tiba ph1: {current_value} <=> {result1['arrdateinsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
@@ -195,17 +196,18 @@ for index, row in df1.iterrows():
         current_value = driver.find_element(By.NAME, "waktu_tiba1[]").get_attribute("value").replace(":", "")
         if (samasama(current_value,result11['etainsert'].iloc[0])==False):
             # comment: 
-            print(f"Waktu tiba ph1: {current_value} - BEDA")
+            print(f"Waktu tiba ph1: {current_value} <=> {result1['etainsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
 
         #PHASE II
-        # input_element = driver.find_element(By.NAME, "tgl_berangkat2[]")
+        input_element = driver.find_element(By.NAME, "tgl_berangkat2[]")
+        time.sleep(1) # Wait for the page to load
         current_value = driver.find_element(By.NAME, "tgl_berangkat2[]").get_attribute("value").replace("-", "")
         if (samasama(current_value,result2['depdateinsert'].iloc[0])==False):
             # comment: 
-            print(f"Tanggal berangkat ph2: {current_value} - BEDA")
+            print(f"Tanggal berangkat ph2: {current_value} <=> {result2['depdateinsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
@@ -213,7 +215,7 @@ for index, row in df1.iterrows():
         current_value = driver.find_element(By.NAME, "waktu_berangkat2[]").get_attribute("value").replace(":", "")
         if (samasama(current_value,result2['etdinsert'].iloc[0])==False):
             # comment: 
-            print(f"Waktu berangkat ph2: {current_value} - BEDA")
+            print(f"Waktu berangkat ph2: {current_value} <=> {result2['etdinsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
@@ -221,7 +223,7 @@ for index, row in df1.iterrows():
         current_value =  driver.find_element(By.NAME, "tgl_tiba2[]").get_attribute("value").replace("-", "")
         if (samasama(current_value,result22['arrdateinsert'].iloc[0])==False):
             # comment: 
-            print(f"Tanggal tiba ph2: {current_value} - BEDA")
+            print(f"Tanggal tiba ph2: {current_value} <=> {result2['arrdateinsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
@@ -229,7 +231,7 @@ for index, row in df1.iterrows():
         current_value = driver.find_element(By.NAME, "waktu_tiba2[]").get_attribute("value").replace(":", "")
         if (samasama(current_value,result22['etainsert'].iloc[0])==False):
             # comment: 
-            print(f"Waktu tiba ph2: {current_value} - BEDA")
+            print(f"Waktu tiba ph2: {current_value} <=> {result2['etainsert'].iloc[0]} - BEDA")
             continue
             # pass
         # end if
@@ -246,7 +248,7 @@ for index, row in df1.iterrows():
             # print("Element exists")
             continue
         except NoSuchElementException:
-            print("Element does not exist")
+            # print("Element does not exist")
             continue
 
         time.sleep(3) # Wait for the page to load
