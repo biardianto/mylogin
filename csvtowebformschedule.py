@@ -68,6 +68,7 @@ bufkloter=''
 datajson = {}
 # df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 for index, row in df1.iterrows():
+    if str(row['embinsert']).strip()=="XXX": continue
     url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
     driver.get(url)
     time.sleep(2) # Wait for the page to load

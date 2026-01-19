@@ -64,6 +64,7 @@ link_element.click()
 idx=0
 for index, row in df.iterrows():
     # if index==0: continue
+    if str(row['embinsert']).strip()=="XXX": continue
     # url = 'https://simhajtraining.garuda-indonesia.com/monitoring/page_monitoring/fltmoninsert.php?embfm='+row['embinsert']+'&&kloterfm=&&flightnofm=&&origfm=&&registerfm=&&destfm=&&depdatefm=&&depdatetofm=&&arrdatetofm=&&arrdatefromfm='
     # driver.get(url)
     time.sleep(2) # Wait for the page to load
