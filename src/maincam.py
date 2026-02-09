@@ -16,7 +16,7 @@ def main(page:flet.Page):
 
 		)
 
-	# REMOVE ALL IMAGE IN YOUPHOTO FOLDER 
+	# REMOVE ALL IMAGE IN YOUPHOTO FOLDER
 	def removeallyouphoto():
 		folder_path = "photo/"
 		# CHECK ALL FILE IN YOUPHOTO FOLDER
@@ -39,7 +39,7 @@ def main(page:flet.Page):
 		# AND SET YOU WINDOW HEIGHT AND WIDTH WEBCAM
 		cv2.resizeWindow("Webcam",400,600)
 
-		# AND SAVE THE FILE NAME WITH TIME NOW 
+		# AND SAVE THE FILE NAME WITH TIME NOW
 		timestamp = str(int(time.time()))
 		myfileface = str("myCumFaceFile" + "_" + timestamp + '.jpg')
 		try:
@@ -53,7 +53,7 @@ def main(page:flet.Page):
 				key = cv2.waitKey(1)
 
 				# AND IF YOU PRESS Q FROM YOU KEYBOARD THEN
-				# THE WEBCAM WINDOW CAN CLOSE 
+				# THE WEBCAM WINDOW CAN CLOSE
 				# AND YOU NOT CAPTURE YOU IMAGE
 				if key == ord("q"):
 					break
@@ -86,11 +86,11 @@ def main(page:flet.Page):
 	flet.Text("Webcam Capture You FAce",
 		size=30,weight="bold"
 	),
-	flet.ElevatedButton("Take My Face",
+	flet.Button("Take My Face",
 		bgcolor="blue",color="white",
 		on_click=takemepicture
 	),
-	myimage 
+	myimage
 
 	])
 	)
