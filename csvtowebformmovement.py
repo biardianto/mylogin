@@ -8,9 +8,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 # 1. Read data from CSV
-ph='2'
-emb='soc'
-fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
+ph='1'
+emb='upg'
+# fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
+fn='seed4insert_mvt_'+emb+'_ph'+ph+'_2026.csv'
 df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 df = df1
 # ph='2'
@@ -35,7 +36,7 @@ service = Service(ChromeDriverManager().install())
 driver = webdriver.Chrome(service=service,options=chrome_options)
 # driver = webdriver.Chrome(options=chrome_options)
 
-# Target URL of the web form    
+# Target URL of the web form
 url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
 # url = 'https://simhaj.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
 
@@ -87,13 +88,13 @@ for index, row in df.iterrows():
         driver.find_element(By.NAME, 'arrdateinsert').send_keys(str(row['arrdateinsert']) if len(str(row['arrdateinsert']))==8 else '0'+str(row['arrdateinsert']))
         driver.find_element(By.NAME, 'etainsert').send_keys(str(row['etainsert']) if len(str(row['etainsert']))==4 else '0'+str(row['etainsert']))
         driver.find_element(By.NAME, 'actypeinsert').send_keys(bufactype)
-        
+
         # Find and click the submit button
         # print(bufactype[:2])
         # input("press enter console")
         driver.find_element(By.NAME, 'sub').click()
         time.sleep(2) # Wait for the page to load
-        
+
         idx=idx+1
         print(f"Submitted data for row {idx} {index} {row['embinsert']}{row['kloterinsert']} ")
         # Find the element by partial link text and click it
