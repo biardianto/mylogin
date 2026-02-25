@@ -66,6 +66,11 @@ input("isi CAPTCHA dan klik submit SIGNIN manulally then press enter console")
 # driver.get(url)
 # time.sleep(2) # Wait for the page to load
 
+# target_option = WebDriverWait(driver, 20).until(
+#         # EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Pilih Embarkasi')]"))
+#         EC.text_to_be_present_in_element((By.TAG_NAME, "h1"), "Sistem Informasi Manajemen Haji")
+#     )
+
 bufembarkasi=''
 bufkloter=''
 datajson = {}
@@ -75,6 +80,11 @@ for index, row in df1.iterrows():
     url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
     driver.get(url)
     time.sleep(2) # Wait for the page to load
+
+    # target_option = WebDriverWait(driver, 10).until(
+    #         # EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Pilih Embarkasi')]"))
+    #         EC.text_to_be_present_in_element((By.TAG_NAME, "span"), "Pilih Embarkasi")
+    #     )
 
     bufembarkasi = row['embinsert']
     bufkloter = row['kloterinsert']
@@ -115,8 +125,13 @@ for index, row in df1.iterrows():
         time.sleep(1)
         input_field.send_keys(Keys.ENTER)
 
-        input_field = driver.find_element(By.NAME, 'kloter')
+        # input_field = driver.find_element(By.NAME, 'kloter')
+        # input_field.click()
+        input_field = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.NAME,"kloter"))
+        )
         input_field.click()
+
         text_to_send = str(result1['kloterinsert'].iloc[0])
         # Send keys one by one
         for character in text_to_send:
