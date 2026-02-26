@@ -62,7 +62,7 @@ driver = webdriver.Chrome(service=service,options=chrome_options)
 # driver = webdriver.Firefox()
 
 # Target URL of the web form
-url = 'https://simhajtraining.garuda-indonesia.com/login'
+url = 'https://simhaj.garuda-indonesia.com/login'
 # url = 'https://simhajtraining.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
 # url = 'https://simhaj.garuda-indonesia.com/monitoring/monitoring.php?monitoring=fltmon'
 
@@ -94,7 +94,7 @@ datajson = {}
 # df1x = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 for index, row in df1.iterrows():
     if str(row['embinsert']).strip()=="XXX": continue
-    url = 'https://simhajtraining.garuda-indonesia.com/penerbangan/show_add'
+    url = 'https://simhaj.garuda-indonesia.com/penerbangan/show_add'
     driver.get(url)
     time.sleep(2) # Wait for the page to load
 
