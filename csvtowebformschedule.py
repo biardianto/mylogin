@@ -17,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time
 
-emb='bdj'
+emb='yia'
 ph='1'
 # fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'_2026.csv'
