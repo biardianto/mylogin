@@ -17,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time
 
-emb='pdg'
+emb='bdj'
 ph='1'
 # fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'_2026.csv'
@@ -28,6 +28,23 @@ ph='2'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'_2026.csv'
 df2 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})
 print("Simulate Entry SIMHAJ menu Schedule Flight for Embarkasi ", str.upper(emb))
+
+# # df22 = df2
+# bufembarkasi='MES'
+# bufkloter='001'
+# result2 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & (originsert=="MED" or originsert=="JED")')
+# bufflight2 = result2['flightnoinsert'].iloc[0]
+# # df2.reset_index(drop=True)
+# result22 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight2 & ((destinsert==@bufembarkasi) | (embinsert == "MES" & destinsert=="KNO") | (embinsert == "JKT" & destinsert=="CGK"))')
+# # result22 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight2 & (embinsert == "MES" & destinsert=="KNO")')
+# # result22 = df2.query('embinsert=="MES" & kloterinsert=="001" & flightnoinsert==3401')
+# # print(result1)
+# # print(result11)
+# print(bufflight2)
+# print(result2)
+# print(result22)
+# # print(df22)
+# driver.quit()
 
 # LOGIN TO SIMHAJ FIRST
 
@@ -100,7 +117,7 @@ for index, row in df1.iterrows():
 
         result2 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & (originsert=="MED" or originsert=="JED")')
         bufflight2 = result2['flightnoinsert'].iloc[0]
-        result22 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight2 & ((destinsert==@bufembarkasi) or (@bufembarkasi == "MES" and destinsert=="KNO") or (@bufembarkasi == "JKT" and destinsert=="CGK"))')
+        result22 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight2 & ((destinsert==@bufembarkasi) or (embinsert == "MES" and destinsert=="KNO") or (embinsert == "JKT" and destinsert=="CGK"))')
         print(result1)
         print(result11)
         print(result2)
