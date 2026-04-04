@@ -9,7 +9,7 @@ import time
 
 # 1. Read data from CSV
 ph='12'
-emb='yia'
+emb='upg'
 # fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'_2026.csv'
 df1 = pd.read_csv(fn,dtype={"kloterinsert":str,"depdateinsert":str,"etdinsert":str,"arrdateinsert":str,"etainsert":str})

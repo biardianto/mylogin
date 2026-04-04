@@ -17,7 +17,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time
 
-emb='soc'
+emb='upg'
 ph='1'
 # fn='seed4insert_mvt_'+emb+'_ph'+ph+'.csv'
 fn='seed4insert_mvt_'+emb+'_ph'+ph+'_2026.csv'
@@ -110,14 +110,14 @@ for index, row in df1.iterrows():
     bufdestination = row['destinsert'] #if(row['originsert']==row['embinsert']) else ""
     bufregister = row['registerinsert'] #if(row['originsert']==row['embinsert']) else ""
 
-    if(((bufembarkasi == buforigin) or (bufembarkasi == "MES" and buforigin=="KNO") or (bufembarkasi == "JKT" and buforigin=="CGK"))):
+    if(((bufembarkasi == buforigin) or (bufembarkasi == "MES" and buforigin=="KNO") or ((bufembarkasi == "JKT" or bufembarkasi == "JKB") and buforigin=="CGK"))):
         result1 = df1.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & originsert==@buforigin')
         bufflight1 = result1['flightnoinsert'].iloc[0]
         result11 = df1.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight1 & (destinsert=="MED" or destinsert=="JED")')
 
-        result2 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & (originsert=="MED" or originsert=="JED")')
+        result2 = df2.query('(embinsert==@bufembarkasi or embinsert=="JKT" or embinsert=="JKB") & kloterinsert==@bufkloter & (originsert=="MED" or originsert=="JED")')
         bufflight2 = result2['flightnoinsert'].iloc[0]
-        result22 = df2.query('embinsert==@bufembarkasi & kloterinsert==@bufkloter & flightnoinsert==@bufflight2 & ((destinsert==@bufembarkasi) or (embinsert == "MES" and destinsert=="KNO") or (embinsert == "JKT" and destinsert=="CGK"))')
+        result22 = df2.query('(embinsert==@bufembarkasi or embinsert=="JKT" or embinsert=="JKB") & kloterinsert==@bufkloter & flightnoinsert==@bufflight2 & ((destinsert==@bufembarkasi) or (embinsert == "MES" and destinsert=="KNO") or ((embinsert == "JKT" or embinsert == "JKB") and destinsert=="CGK"))')
         print(result1)
         print(result11)
         print(result2)

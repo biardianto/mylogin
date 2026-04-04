@@ -1,5 +1,4 @@
 embinsert,kloterinsert,flightnoinsert,originsert,registerinsert,destinsert,depdateinsert,etdinsert,arrdateinsert,etainsert,actypeinsert
-XXX,000,9999,0,T7-SRS,0,30121899,0000,30121899,0000,0
 BDJ,001,8301,BDJ,T7-SRS,JED,02062026,1720,03062026,0355,333
 BDJ,001,8401,JED,T7-SRS,KNO,03062026,0555,03062026,1505,333
 BDJ,001,8401,KNO,T7-SRS,BDJ,03062026,1605,03062026,1915,333
